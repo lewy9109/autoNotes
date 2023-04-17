@@ -18,8 +18,10 @@ type inseptionService struct {
 	repository InspectionRepositoryInterface
 }
 
-func GetInceptionSercviceInterface() InseptionServceInterface {
-	return &inseptionService{}
+func GetInceptionSercvice(repo InspectionRepositoryInterface) InseptionServceInterface {
+	return &inseptionService{
+		repository: repo,
+	}
 }
 
 func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarInspectionRequest) error {
@@ -32,8 +34,10 @@ func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarIn
 		return ErrEmptyField
 	}
 
+	//TODO :: 10 000 dodac config z ustawieniami co ile przeglad
 	nextCarMilage := carInspection.CarMilage + 10000
-	dateInception, err := time.Parse(time.RFC3339, carInspection.DateInspectionCar)
+	const shortForm = "2006-01-02"
+	dateInception, err := time.Parse(shortForm, carInspection.DateInspectionCar)
 
 	if err != nil {
 		return err
@@ -47,8 +51,6 @@ func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarIn
 		NextCarMilage:     nextCarMilage,
 		DateInspectionCar: dateInception,
 	}
-
-	//TODO :: 10 000 dodac config z ustawieniami co ile przeglad
 
 	err = is.repository.CreateRegularCarInspection(carInspectionModel)
 	if err != nil {
