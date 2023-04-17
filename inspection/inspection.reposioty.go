@@ -47,7 +47,7 @@ func (i inspectionRepository) GetReguralCarInspectionById(id int) (*ReguralCarIn
 
 func (i inspectionRepository) GetListRegularCarInceptions(limit, offset int) (*[]ReguralCarInspection, error) {
 	reguralCarInspectionSlice := []ReguralCarInspection{}
-	result := i.db.Limit(limit).Offset(offset).Order("date_inspection_time").Find(&reguralCarInspectionSlice)
+	result := i.db.Limit(limit).Offset(offset).Order("date_inspection_car DESC").Find(&reguralCarInspectionSlice)
 
 	if result.Error != nil {
 		return nil, result.Error
