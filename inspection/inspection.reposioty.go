@@ -6,12 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	ErrOffsetIsEmpty = errors.New("offset-is-empty")
-)
-
 type InspectionRepositoryInterface interface {
-	CreateRegularCarInspection(inspectioon ReguralCarInspection) error
+	CreateRegularCarInspection(carInspection ReguralCarInspection) error
 	GetReguralCarInspectionById(id int) (*ReguralCarInspection, error)
 	GetListRegularCarInceptions(limit, offset int) (*[]ReguralCarInspection, error)
 }
@@ -26,8 +22,8 @@ func GetInceptionRepository(db *gorm.DB) InspectionRepositoryInterface {
 	}
 }
 
-func (i inspectionRepository) CreateRegularCarInspection(inspectioon ReguralCarInspection) error {
-	result := i.db.Create(&inspectioon)
+func (i inspectionRepository) CreateRegularCarInspection(carInspection ReguralCarInspection) error {
+	result := i.db.Create(&carInspection)
 
 	if result.Error != nil {
 		return result.Error
@@ -51,7 +47,7 @@ func (i inspectionRepository) GetReguralCarInspectionById(id int) (*ReguralCarIn
 
 func (i inspectionRepository) GetListRegularCarInceptions(limit, offset int) (*[]ReguralCarInspection, error) {
 	reguralCarInspectionSlice := []ReguralCarInspection{}
-	result := i.db.Limit(limit).Offset(offset).Find(&reguralCarInspectionSlice)
+	result := i.db.Limit(limit).Offset(offset).Order("date_inspection_time").Find(&reguralCarInspectionSlice)
 
 	if result.Error != nil {
 		return nil, result.Error
