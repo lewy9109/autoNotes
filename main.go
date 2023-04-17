@@ -23,22 +23,26 @@ func main() {
 	inspectionRepo := inspection.GetInceptionRepository(db)
 	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 
-	// carInspection := inspection.ReguralCarInspectionRequest{
-	// 	Name:              "dziewiaty oleju",
-	// 	TotalPrice:        350,
-	// 	CarMilage:         190000,
-	// 	DateInspectionCar: "2022-04-09",
-	// }
+	carInspection := inspection.ReguralCarInspectionRequest{
+		Name:              "dziewiaty oleju",
+		TotalPrice:        350,
+		CarMilage:         190000,
+		DateInspectionCar: "2022-04-09",
+	}
 
-	// err = inspectionService.CreateRegularCarInspection(carInspection)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
+	err = inspectionService.CreateRegularCarInspection(carInspection)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	result, err := inspectionService.GetListRegularCarInceptions()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	fmt.Println(result)
+	fmt.Printf("%T", result)
+	fmt.Println("")
+	fmt.Println(len(*result))
+	fmt.Println("")
+	fmt.Println((*result)[1])
 }
