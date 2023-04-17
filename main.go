@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github/lewy9109/autoNotes/inspection"
 	"log"
+	"time"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -23,11 +24,14 @@ func main() {
 	inspectionRepo := inspection.GetInceptionRepository(db)
 	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 
-	carInspection := inspection.ReguralCarInspectionRequest{
+	const shortForm = "2006-01-02"
+	dateInception, _ := time.Parse(shortForm, "2022-04-09")
+
+	carInspection := inspection.ReguralCarInspection{
 		Name:              "dziewiaty oleju",
 		TotalPrice:        350,
 		CarMilage:         190000,
-		DateInspectionCar: "2022-04-09",
+		DateInspectionCar: dateInception,
 	}
 
 	err = inspectionService.CreateRegularCarInspection(carInspection)

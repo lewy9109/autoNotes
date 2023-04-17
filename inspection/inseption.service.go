@@ -2,7 +2,6 @@ package inspection
 
 import (
 	"errors"
-	"time"
 )
 
 var (
@@ -10,7 +9,7 @@ var (
 )
 
 type InseptionServceInterface interface {
-	CreateRegularCarInspection(carInspectioon ReguralCarInspectionRequest) error
+	CreateRegularCarInspection(carInspectioon ReguralCarInspection) error
 	GetListRegularCarInceptions() (*[]ReguralCarInspection, error)
 }
 
@@ -24,35 +23,15 @@ func GetInceptionSercvice(repo InspectionRepositoryInterface) InseptionServceInt
 	}
 }
 
-func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarInspectionRequest) error {
+func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarInspection) error {
 
 	if carInspection.Name == "" {
 		return ErrEmptyField
 	}
 
-	if carInspection.DateInspectionCar == "" {
-		return ErrEmptyField
-	}
+	carInspection.NextCarMilage = carInspection.CarMilage + 10000
 
-	//TODO :: 10 000 dodac config z ustawieniami co ile przeglad
-	nextCarMilage := carInspection.CarMilage + 10000
-	const shortForm = "2006-01-02"
-	dateInception, err := time.Parse(shortForm, carInspection.DateInspectionCar)
-
-	if err != nil {
-		return err
-	}
-
-	carInspectionModel := ReguralCarInspection{
-		Name:              carInspection.Name,
-		Description:       carInspection.Description,
-		TotalPrice:        carInspection.TotalPrice,
-		CarMilage:         carInspection.CarMilage,
-		NextCarMilage:     nextCarMilage,
-		DateInspectionCar: dateInception,
-	}
-
-	err = is.repository.CreateRegularCarInspection(carInspectionModel)
+	err := is.repository.CreateRegularCarInspection(carInspection)
 	if err != nil {
 		return err
 	}
