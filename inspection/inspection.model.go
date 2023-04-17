@@ -1,8 +1,10 @@
 package inspection
 
 import "time"
+import "gorm.io/gorm"
 
 type ReguralCarInspection struct {
+	gorm.Model
 	Name              string    `gorm:"name"`
 	DateInspectionCar time.Time `gorm:"date_inspection_time"`
 	CarMilage         int       `gorm:"car_milage"`
