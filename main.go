@@ -50,3 +50,22 @@ func main() {
 	fmt.Println("")
 	fmt.Println((*result)[1])
 }
+
+// func startHttpServer(userServer userController.UserServerInterface) {
+
+// 	server := gin.Default()
+
+// 	group := server.Group("/user/", userServer.Authorize)
+// 	{
+// 		group.GET("/", userServer.GetInfo)
+// 	}
+
+// 	fmt.Println("start HTTP on po rt 8080")
+// 	server.POST("/users", userServer.CreateUser)
+// 	server.POST("/login", userServer.LoginUser)
+
+// 	err := server.Run()
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 	}
+// }
