@@ -4,6 +4,7 @@ import (
 	"github/lewy9109/autoNotes/inspection"
 	insopectService "github/lewy9109/autoNotes/inspection"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -51,12 +52,27 @@ func (ic *inspectionController) CreateInseption(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, inspect)
 }
-func (ic *inspectionController) GetInspectionById(c *gin.Context) {
-	// id := c.Param("id")
 
-	c.JSON(http.StatusBadRequest, CreateInseptionResponse{})
-	return
+func (ic *inspectionController) GetInspectionById(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	result, err := ic.service.GetRegularCarInceptions(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, CreateInseptionResponse{})
+	}
+
+	carInspection := GetInspectionResponse{
+		Name:              result.Name,
+		DateInspectionCar: result.DateInspectionCar.Format("2006-01-02 15:04:05"),
+		Description:       result.Description,
+		TotalPrice:        result.TotalPrice,
+		NextCarMilage:     result.NextCarMilage,
+		CarMilage:         result.CarMilage,
+	}
+
+	c.JSON(http.StatusOK, carInspection)
 }
+
 func (ic *inspectionController) GetListInspections(c *gin.Context) {
 	result, err := ic.service.GetListRegularCarInceptions()
 

@@ -11,6 +11,7 @@ var (
 type InseptionServceInterface interface {
 	CreateRegularCarInspection(carInspectioon ReguralCarInspection) error
 	GetListRegularCarInceptions() (*[]ReguralCarInspection, error)
+	GetRegularCarInceptions(id int) (*ReguralCarInspection, error)
 }
 
 type inseptionService struct {
@@ -46,5 +47,14 @@ func (is inseptionService) GetListRegularCarInceptions() (*[]ReguralCarInspectio
 		return nil, err
 	}
 
+	return result, nil
+}
+
+func (is inseptionService) GetRegularCarInceptions(id int) (*ReguralCarInspection, error) {
+	result, err := is.repository.GetReguralCarInspectionById(id)
+
+	if err != nil {
+		return nil, err
+	}
 	return result, nil
 }
