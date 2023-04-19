@@ -32,7 +32,7 @@ func startHttpServer(inspectionService inspection.InseptionServceInterface) {
 
 	inspectCarController := controller.GetInspectionControllerInterface(inspectionService)
 	router := gin.Default()
-	fmt.Println("start HTTP on po rt 8080")
+	fmt.Println("Starting HTTP on port 8080 ...")
 
 	inspectCar := router.Group("/inspect")
 	{
