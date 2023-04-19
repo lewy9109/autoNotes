@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"github/lewy9109/autoNotes/inspection"
+	"github/lewy9109/autoNotes/inspection/controller"
 	"log"
-	"time"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -24,48 +25,24 @@ func main() {
 	inspectionRepo := inspection.GetInceptionRepository(db)
 	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 
-	const shortForm = "2006-01-02"
-	dateInception, _ := time.Parse(shortForm, "2022-04-09")
-
-	carInspection := inspection.ReguralCarInspection{
-		Name:              "dziewiaty oleju",
-		TotalPrice:        350,
-		CarMilage:         190000,
-		DateInspectionCar: dateInception,
-	}
-
-	err = inspectionService.CreateRegularCarInspection(carInspection)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	result, err := inspectionService.GetListRegularCarInceptions()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Printf("%T", result)
-	fmt.Println("")
-	fmt.Println(len(*result))
-	fmt.Println("")
-	fmt.Println((*result)[1])
+	startHttpServer(inspectionService)
 }
 
-// func startHttpServer(userServer userController.UserServerInterface) {
+func startHttpServer(inspectionService inspection.InseptionServceInterface) {
 
-// 	server := gin.Default()
+	inspectCarController := controller.GetInspectionControllerInterface(inspectionService)
+	router := gin.Default()
+	fmt.Println("start HTTP on po rt 8080")
 
-// 	group := server.Group("/user/", userServer.Authorize)
-// 	{
-// 		group.GET("/", userServer.GetInfo)
-// 	}
+	inspectCar := router.Group("/inspect")
+	{
+		inspectCar.POST("/", inspectCarController.CreateInseption)
+		inspectCar.GET("/", inspectCarController.GetListInspections)
+		inspectCar.GET("/:id", inspectCarController.GetInspectionById)
+	}
 
-// 	fmt.Println("start HTTP on po rt 8080")
-// 	server.POST("/users", userServer.CreateUser)
-// 	server.POST("/login", userServer.LoginUser)
-
-// 	err := server.Run()
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 	}
-// }
+	err := router.Run()
+	if err != nil {
+		log.Fatalln(err)
+	}
+}

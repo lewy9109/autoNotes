@@ -23,9 +23,7 @@ func GetInceptionRepository(db *gorm.DB) InspectionRepositoryInterface {
 }
 
 func (i inspectionRepository) CreateRegularCarInspection(carInspection ReguralCarInspection) error {
-	result := i.db.Create(&carInspection)
-
-	if result.Error != nil {
+	if result := i.db.Create(&carInspection); result.Error != nil {
 		return result.Error
 	}
 
@@ -35,8 +33,7 @@ func (i inspectionRepository) CreateRegularCarInspection(carInspection ReguralCa
 func (i inspectionRepository) GetReguralCarInspectionById(id int) (*ReguralCarInspection, error) {
 	reguralCarInspection := ReguralCarInspection{}
 
-	result := i.db.First(&reguralCarInspection, id)
-	if result.Error != nil {
+	if result := i.db.First(&reguralCarInspection, id); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -47,9 +44,8 @@ func (i inspectionRepository) GetReguralCarInspectionById(id int) (*ReguralCarIn
 
 func (i inspectionRepository) GetListRegularCarInceptions(limit, offset int) (*[]ReguralCarInspection, error) {
 	reguralCarInspectionSlice := []ReguralCarInspection{}
-	result := i.db.Limit(limit).Offset(offset).Order("date_inspection_car DESC").Find(&reguralCarInspectionSlice)
 
-	if result.Error != nil {
+	if result := i.db.Limit(limit).Offset(offset).Order("date_inspection_car DESC").Find(&reguralCarInspectionSlice); result.Error != nil {
 		return nil, result.Error
 	}
 
