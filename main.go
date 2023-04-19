@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github/lewy9109/autoNotes/inspection"
-	"github/lewy9109/autoNotes/inspection/controller"
+	inspectController "github/lewy9109/autoNotes/inspection/controller"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +30,7 @@ func main() {
 
 func startHttpServer(inspectionService inspection.InseptionServceInterface) {
 
-	inspectCarController := controller.GetInspectionControllerInterface(inspectionService)
+	inspectCarController := inspectController.GetInspectionControllerInterface(inspectionService)
 	router := gin.Default()
 	fmt.Println("Starting HTTP on port 8080 ...")
 
