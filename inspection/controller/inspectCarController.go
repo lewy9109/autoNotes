@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github/lewy9109/autoNotes/inspection"
 	insopectService "github/lewy9109/autoNotes/inspection"
 	"net/http"
@@ -55,6 +56,7 @@ func (ic *inspectionController) CreateInseption(c *gin.Context) {
 
 func (ic *inspectionController) GetInspectionById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
+
 	result, err := ic.service.GetRegularCarInceptions(id)
 
 	if err != nil {
@@ -74,7 +76,25 @@ func (ic *inspectionController) GetInspectionById(c *gin.Context) {
 }
 
 func (ic *inspectionController) GetListInspections(c *gin.Context) {
-	result, err := ic.service.GetListRegularCarInceptions()
+	offset, bool := c.GetQuery("offset")
+	if !bool {
+		fmt.Println("wszedlem kupa")
+		offset = "0"
+	}
+	limit, bool := c.GetQuery("limit")
+	if !bool {
+		limit = "5"
+	}
+
+	fmt.Println("offset")
+	fmt.Printf("%T", offset)
+
+	oofsetInt, _ := strconv.Atoi(offset)
+	limitInt, _ := strconv.Atoi(limit)
+
+	fmt.Printf("%T", oofsetInt)
+
+	result, err := ic.service.GetListRegularCarInceptions(oofsetInt, limitInt)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GetInspectionResponse{})

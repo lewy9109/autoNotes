@@ -9,7 +9,7 @@ import (
 type InspectionRepositoryInterface interface {
 	CreateRegularCarInspection(carInspection ReguralCarInspection) error
 	GetReguralCarInspectionById(id int) (*ReguralCarInspection, error)
-	GetListRegularCarInceptions(limit, offset int) (*[]ReguralCarInspection, error)
+	GetListRegularCarInceptions(offset, limit int) (*[]ReguralCarInspection, error)
 }
 
 type inspectionRepository struct {
@@ -42,7 +42,7 @@ func (i inspectionRepository) GetReguralCarInspectionById(id int) (*ReguralCarIn
 	return &reguralCarInspection, nil
 }
 
-func (i inspectionRepository) GetListRegularCarInceptions(limit, offset int) (*[]ReguralCarInspection, error) {
+func (i inspectionRepository) GetListRegularCarInceptions(offset, limit int) (*[]ReguralCarInspection, error) {
 	reguralCarInspectionSlice := []ReguralCarInspection{}
 
 	if result := i.db.Limit(limit).Offset(offset).Order("date_inspection_car DESC").Find(&reguralCarInspectionSlice); result.Error != nil {
