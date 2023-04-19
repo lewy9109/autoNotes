@@ -41,7 +41,8 @@ func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarIn
 
 func (is inseptionService) GetListRegularCarInceptions() (*[]ReguralCarInspection, error) {
 
-	result, err := is.repository.GetListRegularCarInceptions(10, 0)
+	//TODO: add offset and limit from request param or header param
+	result, err := is.repository.GetListRegularCarInceptions(30, 0)
 
 	if err != nil {
 		return nil, err
