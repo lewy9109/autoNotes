@@ -2,6 +2,7 @@ package inspection
 
 import (
 	"errors"
+	"fmt"
 )
 
 var (
@@ -31,6 +32,8 @@ func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarIn
 	}
 
 	carInspection.NextCarMilage = carInspection.CarMilage + 10000
+
+	fmt.Println(carInspection)
 
 	err := is.repository.CreateRegularCarInspection(carInspection)
 	if err != nil {

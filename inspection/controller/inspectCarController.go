@@ -34,7 +34,7 @@ func (ic *inspectionController) CreateInseption(c *gin.Context) {
 		return
 	}
 	const shortForm = "2006-01-02"
-	dateInception, _ := time.Parse(shortForm, "2022-04-09")
+	dateInception, _ := time.Parse(shortForm, inspect.DateInspectionCar)
 
 	createInspect := insopectService.ReguralCarInspection{
 		Name:              inspect.Name,
@@ -86,13 +86,8 @@ func (ic *inspectionController) GetListInspections(c *gin.Context) {
 		limit = "5"
 	}
 
-	fmt.Println("offset")
-	fmt.Printf("%T", offset)
-
 	oofsetInt, _ := strconv.Atoi(offset)
 	limitInt, _ := strconv.Atoi(limit)
-
-	fmt.Printf("%T", oofsetInt)
 
 	result, err := ic.service.GetListRegularCarInceptions(oofsetInt, limitInt)
 
