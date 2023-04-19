@@ -10,7 +10,7 @@ var (
 
 type InseptionServceInterface interface {
 	CreateRegularCarInspection(carInspectioon ReguralCarInspection) error
-	GetListRegularCarInceptions() (*[]ReguralCarInspection, error)
+	GetListRegularCarInceptions(offset, limit int) (*[]ReguralCarInspection, error)
 	GetRegularCarInceptions(id int) (*ReguralCarInspection, error)
 }
 
@@ -39,10 +39,9 @@ func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarIn
 	return nil
 }
 
-func (is inseptionService) GetListRegularCarInceptions() (*[]ReguralCarInspection, error) {
+func (is inseptionService) GetListRegularCarInceptions(offset, limit int) (*[]ReguralCarInspection, error) {
 
-	//TODO: add offset and limit from request param or header param
-	result, err := is.repository.GetListRegularCarInceptions(30, 0)
+	result, err := is.repository.GetListRegularCarInceptions(offset, limit)
 
 	if err != nil {
 		return nil, err
