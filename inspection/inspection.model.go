@@ -1,7 +1,10 @@
 package inspection
 
-import "time"
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type ReguralCarInspection struct {
 	gorm.Model
