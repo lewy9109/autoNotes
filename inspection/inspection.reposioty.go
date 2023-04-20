@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	cache "github/lewy9109/autoNotes/cacheRedis"
+	"strconv"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +14,7 @@ import (
 
 var (
 	ctx            = context.Background()
-	KeyInspectList = "get-list-regular-inspect"
+	keyInspectList = "get-list-regular-inspect"
 )
 
 type InspectionRepositoryInterface interface {
@@ -53,10 +55,11 @@ func (i inspectionRepository) GetReguralCarInspectionById(id int) (*ReguralCarIn
 
 func (i inspectionRepository) GetListRegularCarInspections(offset, limit int) (*[]ReguralCarInspection, error) {
 	reguralCarInspectionSlice := []ReguralCarInspection{}
+	keyInspectList = keyInspectList + "offset" + strconv.Itoa(offset) + "lim" + strconv.Itoa(limit)
+	fmt.Println(keyInspectList)
 
 	rdb := cache.NewRedisClient()
-
-	resultCache := rdb.Get(ctx, KeyInspectList)
+	resultCache := rdb.Get(ctx, keyInspectList)
 
 	if resultCache != "" {
 		json.Unmarshal([]byte(resultCache), &reguralCarInspectionSlice)
@@ -72,7 +75,7 @@ func (i inspectionRepository) GetListRegularCarInspections(offset, limit int) (*
 		panic(err)
 	}
 
-	rdb.Set(ctx, KeyInspectList, string(jsonList), time.Hour)
+	rdb.Set(ctx, keyInspectList, string(jsonList), 1*time.Minute)
 
 	return &reguralCarInspectionSlice, nil
 }
