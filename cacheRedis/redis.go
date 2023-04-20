@@ -2,11 +2,13 @@ package cacheRedis
 
 import (
 	"context"
+	"time"
+
 	"github.com/redis/go-redis/v9"
 )
 
 type RedisClientInterface interface {
-	Set(ctx context.Context, key, value string)
+	Set(ctx context.Context, key, value string, time time.Duration)
 	Get(ctx context.Context, key string) string
 }
 
@@ -42,10 +44,10 @@ func (rc *redisClient) Get(ctx context.Context, key string) string {
 	return val
 }
 
-func (rc *redisClient) Set(ctx context.Context, key, value string) {
+func (rc *redisClient) Set(ctx context.Context, key, value string, time time.Duration) {
 	client := rc.getClient()
 
-	err := client.Set(ctx, key, value, 0).Err()
+	err := client.Set(ctx, key, value, time).Err()
 	if err != nil {
 		panic(err)
 	}
