@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	cache "github/lewy9109/autoNotes/cacheRedis"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -71,7 +72,7 @@ func (i inspectionRepository) GetListRegularCarInspections(offset, limit int) (*
 		panic("BLAD json")
 	}
 
-	rdb.Set(ctx, KeyInspectList, string(jsonList))
+	rdb.Set(ctx, KeyInspectList, string(jsonList), time.Hour)
 
 	return &reguralCarInspectionSlice, nil
 }
