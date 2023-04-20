@@ -69,7 +69,7 @@ func (i inspectionRepository) GetListRegularCarInspections(offset, limit int) (*
 
 	jsonList, err := json.Marshal(reguralCarInspectionSlice)
 	if err != nil {
-		panic("BLAD json")
+		panic(err)
 	}
 
 	rdb.Set(ctx, KeyInspectList, string(jsonList), time.Hour)
