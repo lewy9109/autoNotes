@@ -44,7 +44,7 @@ func (is inseptionService) CreateRegularCarInspection(carInspection ReguralCarIn
 
 func (is inseptionService) GetListRegularCarInceptions(offset, limit int) (*[]ReguralCarInspection, error) {
 
-	result, err := is.repository.GetListRegularCarInceptions(offset, limit)
+	result, err := is.repository.GetListRegularCarInspections(offset, limit)
 
 	if err != nil {
 		return nil, err
