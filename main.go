@@ -13,19 +13,28 @@ import (
 
 func main() {
 
-	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.AutoMigrate(&inspection.ReguralCarInspection{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := startDB()
 
 	inspectionRepo := inspection.GetInceptionRepository(db)
 	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 
 	startHttpServer(inspectionService)
+}
+
+func startDB() *gorm.DB {
+	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+		panic("Error connection")
+
+	}
+	err = db.AutoMigrate(&inspection.ReguralCarInspection{})
+	if err != nil {
+		log.Fatal(err)
+		panic("Error automigrate")
+	}
+
+	return db
 }
 
 func startHttpServer(inspectionService inspection.InseptionServceInterface) {

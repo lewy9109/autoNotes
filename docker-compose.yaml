@@ -1,0 +1,36 @@
+version: '3'
+services:
+#   autoInspect-postgres:
+#     image: postgres:11.8-alpine
+#     container_name: autoInspect-postgres
+#     restart: on-failure
+#     environment:
+#       POSTGRES_USER: ${DOCKER_POSTGRES_USER}
+#       POSTGRES_PASSWORD: ${DOCKER_POSTGRES_PASSWORD}
+#       POSTGRES_DB: ${DOCKER_POSTGRES_DB}
+#     ports:
+#       - '${DOCKER_POSTGRES_PORT}:5432'
+# #    volumes:
+# #      - ./docker/data/postgres:/var/lib/postgresql/data:rw
+#     networks:
+#       - autoInspect-network
+
+  autoInspect-redis:
+    image: redis:6-alpine
+    container_name: autoInspect-redis
+    restart: on-failure
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '6380:6379'
+    volumes:
+      - ./docker/data/redis:/var/lib/redis
+    networks:
+      - autoInspect-network
+
+volumes:
+  cache-data:
+
+networks:
+  autoInspect-network:
+    external: true
