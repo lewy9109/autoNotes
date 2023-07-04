@@ -2,12 +2,12 @@ package inspection
 
 import (
 	"context"
-	"encoding/json"
+	// "encoding/json"
 	"errors"
 	"fmt"
-	cache "github.com/lewy9109/autoNotes/pkg-Cache/cacheRedis"
+	// cache "github.com/lewy9109/autoNotes/pkg-Cache/cacheRedis"
 	"strconv"
-	"time"
+	// "time"
 
 	"gorm.io/gorm"
 )
@@ -58,24 +58,24 @@ func (i inspectionRepository) GetListRegularCarInspections(offset, limit int) (*
 	keyInspectList = keyInspectList + "offset" + strconv.Itoa(offset) + "lim" + strconv.Itoa(limit)
 	fmt.Println(keyInspectList)
 
-	rdb := cache.NewRedisClient()
-	resultCache := rdb.Get(ctx, keyInspectList)
+	// rdb := cache.NewRedisClient()
+	// resultCache := rdb.Get(ctx, keyInspectList)
 
-	if resultCache != "" {
-		json.Unmarshal([]byte(resultCache), &reguralCarInspectionSlice)
-		return &reguralCarInspectionSlice, nil
-	}
+	// if resultCache != "" {
+	// 	json.Unmarshal([]byte(resultCache), &reguralCarInspectionSlice)
+	// 	return &reguralCarInspectionSlice, nil
+	// }
 
 	if result := i.db.Limit(limit).Offset(offset).Order("date_inspection_car DESC").Find(&reguralCarInspectionSlice); result.Error != nil {
 		return nil, result.Error
 	}
 
-	jsonList, err := json.Marshal(reguralCarInspectionSlice)
-	if err != nil {
-		panic(err)
-	}
+	// jsonList, err := json.Marshal(reguralCarInspectionSlice)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	rdb.Set(ctx, keyInspectList, string(jsonList), 1*time.Minute)
+	// rdb.Set(ctx, keyInspectList, string(jsonList), 1*time.Minute)
 
 	return &reguralCarInspectionSlice, nil
 }
