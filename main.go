@@ -40,20 +40,12 @@ func startHttpServer(db *gorm.DB) {
 	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 	inspectCarController := inspectController.GetInspectionControllerInterface(inspectionService)
 
-	router := gin.Default()
-	fmt.Println("Starting HTTP on port 8080 ...")
-
-	inspectCarGroup := router.Group("/inspect")
-	{
-		inspectCarGroup.POST("/", inspectCarController.CreateInseption)
-		inspectCarGroup.GET("/", inspectCarController.GetListInspections)
-		inspectCarGroup.GET("/:id", inspectCarController.GetInspectionById)
-	}
-
 	userInfra := user.DefaultUserInfraStructure(db)
 	userService := user.DefalutUserService(userInfra, "secretToken")
-
 	userServer := userController.DefalutUserServer(userService)
+
+	router := gin.Default()
+	fmt.Println("Starting HTTP on port 8080 ...")
 
 	groupUser := router.Group("/user/", userServer.Authorize)
 	{
@@ -62,6 +54,13 @@ func startHttpServer(db *gorm.DB) {
 
 	router.POST("/users", userServer.CreateUser)
 	router.POST("/login", userServer.LoginUser)
+
+	inspectCarGroup := router.Group("/inspect", userServer.Authorize)
+	{
+		inspectCarGroup.POST("/", inspectCarController.CreateInseption)
+		inspectCarGroup.GET("/", inspectCarController.GetListInspections)
+		inspectCarGroup.GET("/:id", inspectCarController.GetInspectionById)
+	}
 
 	err := router.Run(":9889")
 	if err != nil {
