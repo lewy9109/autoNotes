@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/lewy9109/autoNotes/pkg-Inspection/inspection"
+	"log"
+
 	inspectController "github.com/lewy9109/autoNotes/pkg-Inspection/controller"
+	"github.com/lewy9109/autoNotes/pkg-Inspection/inspection"
 	"github.com/lewy9109/autoNotes/pkg-User/controller/userController"
 	"github.com/lewy9109/autoNotes/pkg-User/user"
-	"log"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
@@ -19,11 +20,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	err = db.AutoMigrate(&inspection.ReguralCarInspection{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	err = db.AutoMigrate(&user.User{})
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	startHttpServer(db)
 }
@@ -48,7 +54,6 @@ func startHttpServer(db *gorm.DB) {
 	userService := user.DefalutUserService(userInfra, "secretToken")
 
 	userServer := userController.DefalutUserServer(userService)
-
 
 	groupUser := router.Group("/user/", userServer.Authorize)
 	{
