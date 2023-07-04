@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"github/lewy9109/autoNotes/inspection"
-	insopectService "github/lewy9109/autoNotes/inspection"
+	"github.com/lewy9109/autoNotes/pkg-Inspection/inspection"
+	insopectService "github.com/lewy9109/autoNotes/pkg-Inspection/inspection"
 	"net/http"
 	"strconv"
 	"time"

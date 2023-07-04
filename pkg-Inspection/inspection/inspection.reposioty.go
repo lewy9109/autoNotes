@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	cache "github/lewy9109/autoNotes/cacheRedis"
+	cache "github.com/lewy9109/autoNotes/pkg-Cache/cacheRedis"
 	"strconv"
 	"time"
 
