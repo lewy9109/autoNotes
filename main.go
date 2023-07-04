@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github/lewy9109/autoNotes/inspection"
-	inspectController "github/lewy9109/autoNotes/inspection/controller"
+	"github.com/lewy9109/autoNotes/pkg-Inspection/inspection"
+	inspectController "github.com/lewy9109/autoNotes/pkg-Inspection/controller"
 	"log"
 
 	"github.com/gin-gonic/gin"
