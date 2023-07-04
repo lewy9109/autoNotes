@@ -41,7 +41,7 @@ func startHttpServer(inspectionService inspection.InseptionServceInterface) {
 		inspectCar.GET("/:id", inspectCarController.GetInspectionById)
 	}
 
-	err := router.Run()
+	err := router.Run(":9889")
 	if err != nil {
 		log.Fatalln(err)
 	}
