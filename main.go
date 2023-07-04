@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/lewy9109/autoNotes/pkg-Inspection/inspection"
 	inspectController "github.com/lewy9109/autoNotes/pkg-Inspection/controller"
+	"github.com/lewy9109/autoNotes/pkg-User/controller/userController"
+	"github.com/lewy9109/autoNotes/pkg-User/user"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -22,27 +24,43 @@ func main() {
 		log.Fatal(err)
 	}
 
-	inspectionRepo := inspection.GetInceptionRepository(db)
-	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 
-	startHttpServer(inspectionService)
+	startHttpServer(db)
 }
 
-func startHttpServer(inspectionService inspection.InseptionServceInterface) {
+func startHttpServer(db *gorm.DB) {
 
+	inspectionRepo := inspection.GetInceptionRepository(db)
+	inspectionService := inspection.GetInceptionSercvice(inspectionRepo)
 	inspectCarController := inspectController.GetInspectionControllerInterface(inspectionService)
+
 	router := gin.Default()
 	fmt.Println("Starting HTTP on port 8080 ...")
 
-	inspectCar := router.Group("/inspect")
+	inspectCarGroup := router.Group("/inspect")
 	{
-		inspectCar.POST("/", inspectCarController.CreateInseption)
-		inspectCar.GET("/", inspectCarController.GetListInspections)
-		inspectCar.GET("/:id", inspectCarController.GetInspectionById)
+		inspectCarGroup.POST("/", inspectCarController.CreateInseption)
+		inspectCarGroup.GET("/", inspectCarController.GetListInspections)
+		inspectCarGroup.GET("/:id", inspectCarController.GetInspectionById)
 	}
+
+	userInfra := user.DefaultUserInfraStructure(db)
+	userService := user.DefalutUserService(userInfra, "secretToken")
+
+	userServer := userController.DefalutUserServer(userService)
+
+
+	groupUser := router.Group("/user/", userServer.Authorize)
+	{
+		groupUser.GET("/", userServer.GetInfo)
+	}
+
+	router.POST("/users", userServer.CreateUser)
+	router.POST("/login", userServer.LoginUser)
 
 	err := router.Run(":9889")
 	if err != nil {
 		log.Fatalln(err)
+		return
 	}
 }
