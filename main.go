@@ -42,20 +42,20 @@ func startHttpServer(db *gorm.DB) {
 
 	userInfra := user.NewUserInfrastructure(db)
 	userService := user.NewUserService(userInfra, "secretToken")
-	userServer := userController.NewUserServer(userService)
+	userController := userController.NewUserController(userService)
 
 	router := gin.Default()
 	fmt.Println("Starting HTTP on port 8080 ...")
 
-	groupUser := router.Group("/user/", userServer.Authorize)
+	groupUser := router.Group("/user/", userController.Authorize)
 	{
-		groupUser.GET("/", userServer.GetInfo)
+		groupUser.GET("/", userController.GetInfo)
 	}
 
-	router.POST("/users", userServer.CreateUser)
-	router.POST("/login", userServer.LoginUser)
+	router.POST("/users", userController.CreateUser)
+	router.POST("/login", userController.LoginUser)
 
-	inspectCarGroup := router.Group("/inspect", userServer.Authorize)
+	inspectCarGroup := router.Group("/inspect", userController.Authorize)
 	{
 		inspectCarGroup.POST("/", inspectCarController.CreateInseption)
 		inspectCarGroup.GET("/", inspectCarController.GetListInspections)

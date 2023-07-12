@@ -9,24 +9,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserServerInterface interface {
+type UserControllerInterface interface {
 	CreateUser(context *gin.Context)
 	LoginUser(context *gin.Context)
 	Authorize(context *gin.Context)
 	GetInfo(context *gin.Context)
 }
 
-func NewUserServer(service userService.UserServiceInterface) UserServerInterface {
-	return &userServer{
+func NewUserController(service userService.UserServiceInterface) UserControllerInterface {
+	return &userController{
 		service: service,
 	}
 }
 
-type userServer struct {
+type userController struct {
 	service userService.UserServiceInterface
 }
 
-func (u *userServer) CreateUser(context *gin.Context) {
+func (u *userController) CreateUser(context *gin.Context) {
 	user := CreateUserRequest{}
 	err := context.BindJSON(&user)
 	if err != nil {
@@ -53,7 +53,7 @@ func (u *userServer) CreateUser(context *gin.Context) {
 
 	context.JSON(http.StatusCreated, user)
 }
-func (u *userServer) LoginUser(context *gin.Context) {
+func (u *userController) LoginUser(context *gin.Context) {
 	loginUser := LoginRequest{}
 	err := context.BindJSON(&loginUser)
 	if err != nil {
@@ -69,7 +69,7 @@ func (u *userServer) LoginUser(context *gin.Context) {
 	context.JSON(http.StatusOK, LoginResponse{AccessToken: token})
 }
 
-func (u *userServer) Authorize(context *gin.Context) {
+func (u *userController) Authorize(context *gin.Context) {
 	token := context.GetHeader("authorized")
 	if token == "" {
 		context.JSON(http.StatusUnauthorized, nil)
@@ -86,7 +86,7 @@ func (u *userServer) Authorize(context *gin.Context) {
 	context.Next()
 }
 
-func (u *userServer) GetInfo(context *gin.Context) {
+func (u *userController) GetInfo(context *gin.Context) {
 	userIdString := context.GetHeader("user_id")
 	if userIdString == "" {
 		context.JSON(http.StatusBadRequest, nil)
