@@ -16,7 +16,7 @@ type UserServerInterface interface {
 	GetInfo(context *gin.Context)
 }
 
-func DefalutUserServer(service userService.UserServiceInterface) UserServerInterface {
+func NewUserServer(service userService.UserServiceInterface) UserServerInterface {
 	return &userServer{
 		service: service,
 	}

@@ -17,7 +17,7 @@ type userInfra struct {
 	db *gorm.DB
 }
 
-func DefaultUserInfraStructure(db *gorm.DB) UserInfrastructure {
+func NewUserInfrastructure(db *gorm.DB) UserInfrastructure {
 
 	return &userInfra{
 		db,

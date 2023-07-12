@@ -19,7 +19,7 @@ type inseptionService struct {
 	repository InspectionRepositoryInterface
 }
 
-func GetInceptionSercvice(repo InspectionRepositoryInterface) InseptionServceInterface {
+func NewService(repo InspectionRepositoryInterface) InseptionServceInterface {
 	return &inseptionService{
 		repository: repo,
 	}

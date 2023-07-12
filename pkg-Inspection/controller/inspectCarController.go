@@ -21,7 +21,7 @@ type inspectionController struct {
 	service inspection.InseptionServceInterface
 }
 
-func GetInspectionControllerInterface(service inspection.InseptionServceInterface) InspectionControllerInterface {
+func New(service inspection.InseptionServceInterface) InspectionControllerInterface {
 	return &inspectionController{service: service}
 }
 

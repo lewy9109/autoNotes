@@ -17,7 +17,7 @@ type userSercive struct {
 	jwtSecret string
 }
 
-func DefalutUserService(userInfrastructure UserInfrastructure, jwtSecret string) UserServiceInterface {
+func NewUserService(userInfrastructure UserInfrastructure, jwtSecret string) UserServiceInterface {
 	return &userSercive{
 		infra:     userInfrastructure,
 		jwtSecret: jwtSecret,

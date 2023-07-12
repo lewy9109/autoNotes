@@ -27,7 +27,7 @@ type inspectionRepository struct {
 	db *gorm.DB
 }
 
-func GetInceptionRepository(db *gorm.DB) InspectionRepositoryInterface {
+func NewRepository(db *gorm.DB) InspectionRepositoryInterface {
 	return &inspectionRepository{
 		db,
 	}
