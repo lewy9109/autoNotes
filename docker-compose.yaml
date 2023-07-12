@@ -1,14 +1,14 @@
 version: "3.4"
 
 services:
-    autoNotes-app:
-        container_name: autoNotes-app
+    auto-notes-app:
+        container_name: auto-notes-app
         build:
             context: .
         ports:
             - "${DOCKER_APP_PORT:-38008}:80"
         depends_on:
-            - autoNotes-db
+            - auto-notes-db
         restart: unless-stopped
         volumes:
             - .:/app
@@ -19,11 +19,11 @@ services:
             retries: 3
             start_period: 30s
         networks:
-            - autoNotes-network
+            - auto-notes-network
 
-    autoNotes-db:
+    auto-notes-db:
         image: mysql:8.0
-        container_name: autoNotes-db
+        container_name: auto-notes-db
         restart: always
         environment:
             MYSQL_USER: ${DOCKER_MYSQL_USER}
@@ -35,7 +35,7 @@ services:
         volumes:
             - mysql-data:/var/lib/mysql
         networks:
-            - autoNotes-network
+            - auto-notes-network
 
 
 volumes:
@@ -43,5 +43,5 @@ volumes:
     mysql-data:
 
 networks:
-    autoNotes-network:
-        external: true
+    auto-notes-network:
+        external: false
