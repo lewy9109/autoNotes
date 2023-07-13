@@ -16,6 +16,11 @@ import (
 
 func main() {
 
+	db := initDatabase()
+	startHttpServer(db)
+}
+
+func initDatabase() db grom.DB {
 	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +36,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	startHttpServer(db)
+	return db
 }
 
 func startHttpServer(db *gorm.DB) {
