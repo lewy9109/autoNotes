@@ -1,0 +1,47 @@
+version: "3.4"
+
+services:
+    auto-notes-app:
+        container_name: auto-notes-app
+        build:
+            context: .
+        ports:
+            - "${DOCKER_APP_PORT:-38008}:80"
+        depends_on:
+            - auto-notes-db
+        restart: unless-stopped
+        volumes:
+            - .:/app
+            - cache-data:/app/cache
+        healthcheck:
+            interval: 10s
+            timeout: 3s
+            retries: 3
+            start_period: 30s
+        networks:
+            - auto-notes-network
+
+    auto-notes-db:
+        image: mysql:8.0
+        container_name: auto-notes-db
+        restart: always
+        environment:
+            MYSQL_USER: ${DOCKER_MYSQL_USER}
+            MYSQL_PASSWORD: ${DOCKER_MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DOCKER_MYSQL_DB}
+        ports:
+            - "${DOCKER_MYSQL_PORT:-38105}:3306"
+        volumes:
+            - mysql-data:/var/lib/mysql
+        networks:
+            - auto-notes-network
+
+
+volumes:
+    cache-data:
+    mysql-data:
+
+networks:
+    auto-notes-network:
+        external: false
